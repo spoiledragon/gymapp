@@ -1,84 +1,67 @@
-// ignore_for_file: equal_elements_in_set
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gymapp/Widgets/ExerciseWidget.dart';
+import 'package:gymapp/Widgets/Listview.dart';
+import 'package:gymapp/classes/ExerciseClass.dart';
 import 'package:intl/intl.dart';
-import 'package:riverpod/riverpod.dart';
-import '../states/states.dart';
+import "package:gymapp/states/states.dart";
 
-class main_Page extends ConsumerWidget {
-  String Username;
-  main_Page({required this.Username});
-
+class Main_Page extends ConsumerWidget {
+  late String Username;
+  Main_Page({required this.Username});
+//@listas
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var date = DateTime.now();
-    var todayDate = DateFormat('EEEE').format(date);
-    var Days = {
-      "Monday",
-      "Thursday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    };
+    //providers
 
-    var Exercises = [
-      "Chest",
-      "Back",
-      "Leg",
-      "pilin",
-      "esto",
-      "L2",
-      "Chest",
-      "Back",
-      "Leg",
-      "pilin",
-      "esto",
-      "L2",
+    StateController<int> counter = ref.watch(counterProvider.notifier);
+
+    //valores
+    var _exercies = [
+      Exercise("tis", 200, "today"),
+      Exercise("tis2", 2002, "today2"),
     ];
+    var today = DateFormat('EEEE').format(DateTime.now());
+    //Funciones
+    changeColor() {
+      print(ref.read(DarkThemeProvider));
+      ref.watch(DarkThemeProvider)
+          ? ref.watch(DarkThemeProvider.state).state = false
+          : ref.watch(DarkThemeProvider.state).state = true;
+    }
+
+    pressscaffold() {
+      var exe = Exercise("ADDED", 20000, "IDK");
+      _exercies.add(exe);
+      counter.state++;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text(Username))),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(ref.watch(DarkThemeProvider));
-          ref.watch(DarkThemeProvider)
-              ? ref.watch(DarkThemeProvider.state).state = false
-              : ref.watch(DarkThemeProvider.state).state = true;
-          print(ref.watch(DarkThemeProvider));
-        },
+      appBar: AppBar(
+        title: Center(child: Text(Username)),
+        actions: [
+          IconButton(onPressed: changeColor, icon: Icon(Icons.dark_mode))
+        ],
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        pressscaffold();
+      }),
       body: Center(
         //! Sale el Nombre de usuario de Inicio
 
         child: Column(
           children: <Widget>[
             Text(
-              "Today is $todayDate",
+              "Today is " + today,
               style: GoogleFonts.bebasNeue(fontSize: 30, color: Colors.white),
             ),
             SizedBox(
               height: 150.0,
               child: Row(
                 children: [
-                  Text("+"),
                   Expanded(
-                    child: ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: Exercises.length,
-                      //!Creador de la lista en horizontal
-                      itemBuilder: (BuildContext context, int index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          Exercises[index].toString(),
-                        ),
-                      ),
-                    ),
+                    child: ExerciseList(),
                   ),
                 ],
               ),

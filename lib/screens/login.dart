@@ -1,6 +1,8 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/screens/main_page.dart';
 
@@ -16,18 +18,39 @@ class _login_pageState extends State<login_page> {
   final passwordController = TextEditingController();
 
   @override
+  void initState() {
+    loadKeys();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     userController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
-  void loginbtn() {
-    if ((userController.text == "spoiled") ||
+  Future<void> loadKeys() async {
+    final userKeys = await SharedPreferences.getInstance();
+    setState(() {
+      userController.text = (userKeys.getString('username') ?? "");
+    });
+  }
+
+  Future<void> loginbtn() async {
+    if ((userController.text == "spoiled") &&
         (passwordController.text == "digimon123")) {
+      final _userKeys = await SharedPreferences.getInstance();
+      setState(() {
+        print("se ha guardado" + userController.text);
+        _userKeys.setString('username', userController.text);
+      });
       print("Entras papito");
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => main_Page(Username: userController.text)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Main_Page(Username: userController.text)));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("User or Password ")));
     }
   }
 
@@ -55,7 +78,7 @@ class _login_pageState extends State<login_page> {
                 height: 15,
               ),
               Text(
-                "Welcome Back",
+                "Welcome Back ${userController.text}",
                 style: TextStyle(
                   fontSize: 20,
                 ),
