@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gymapp/Widgets/ExerciseWidget.dart';
 import 'package:gymapp/Widgets/Listview.dart';
 import 'package:gymapp/classes/ExerciseClass.dart';
+import 'package:gymapp/screens/addExercise_screen.dart';
 import 'package:intl/intl.dart';
 import "package:gymapp/states/states.dart";
 
@@ -15,13 +15,9 @@ class Main_Page extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //providers
 
-    StateController<int> counter = ref.watch(counterProvider.notifier);
+    List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
 
     //valores
-    var _exercies = [
-      Exercise("tis", 200, "today"),
-      Exercise("tis2", 2002, "today2"),
-    ];
     var today = DateFormat('EEEE').format(DateTime.now());
     //Funciones
     changeColor() {
@@ -31,10 +27,17 @@ class Main_Page extends ConsumerWidget {
           : ref.watch(DarkThemeProvider.state).state = true;
     }
 
-    pressscaffold() {
-      var exe = Exercise("ADDED", 20000, "IDK");
-      _exercies.add(exe);
-      counter.state++;
+    //funciones
+
+    Future<void> _addExercise() async {
+      final result = await showDialog(
+        context: context,
+        builder: (_) => AddExercise_class(),
+      );
+
+      if (result != null) {
+        ref.watch(ExerciseProvider.notifier).addExercise(result);
+      }
     }
 
     return Scaffold(
@@ -45,30 +48,33 @@ class Main_Page extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
-        pressscaffold();
+        _addExercise();
       }),
-      body: Center(
-        //! Sale el Nombre de usuario de Inicio
+      body: _ejercicios.isEmpty
+          ? Center(child: Text("No Hay ejercicios"))
+          : Center(
+              //! Sale el Nombre de usuario de Inicio
 
-        child: Column(
-          children: <Widget>[
-            Text(
-              "Today is " + today,
-              style: GoogleFonts.bebasNeue(fontSize: 30, color: Colors.white),
-            ),
-            SizedBox(
-              height: 150.0,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ExerciseList(),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "Today is " + today,
+                    style: GoogleFonts.bebasNeue(
+                        fontSize: 30, color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 150.0,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ExerciseList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
 
       //!Bottom Navigation
 
