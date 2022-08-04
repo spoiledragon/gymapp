@@ -34,6 +34,7 @@ class _login_pageState extends State<login_page> {
     final userKeys = await SharedPreferences.getInstance();
     setState(() {
       userController.text = (userKeys.getString('username') ?? "");
+      passwordController.text = (userKeys.getString('password') ?? "");
     });
   }
 
@@ -44,6 +45,7 @@ class _login_pageState extends State<login_page> {
       setState(() {
         print("se ha guardado" + userController.text);
         _userKeys.setString('username', userController.text);
+        _userKeys.setString('password', passwordController.text);
       });
       print("Entras papito");
       Navigator.of(context).push(MaterialPageRoute(
@@ -57,8 +59,6 @@ class _login_pageState extends State<login_page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      // ignore: prefer_const_literals_to_create_immutables
       body: SafeArea(
         child: Center(
           child: Column(
@@ -91,8 +91,8 @@ class _login_pageState extends State<login_page> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
+                  width: MediaQuery.of(context).size.width / 3,
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -115,8 +115,8 @@ class _login_pageState extends State<login_page> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
+                   width: MediaQuery.of(context).size.width / 3,
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -142,6 +142,7 @@ class _login_pageState extends State<login_page> {
                 child: GestureDetector(
                   onTap: () => loginbtn(),
                   child: Container(
+                     width: MediaQuery.of(context).size.width / 5,
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       color: Colors.deepPurple,

@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:gymapp/Widgets/ExerciseWidget.dart';
 import 'package:gymapp/classes/ExerciseClass.dart';
-import 'package:gymapp/states/states.dart';
+
+import '../screens/exerciseScreen.dart';
 
 class ExerciseList extends ConsumerStatefulWidget {
   const ExerciseList({Key? key}) : super(key: key);
@@ -12,6 +13,14 @@ class ExerciseList extends ConsumerStatefulWidget {
 }
 
 class _ExerciseListState extends ConsumerState<ExerciseList> {
+  Future<void> gotoExercise(Exercise exe) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ExerciseScreen(ejercicio: exe),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
@@ -22,16 +31,19 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
         itemCount: _ejercicios.length,
         //!Creador de la lista en horizontal
         itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              print(index);
-            },
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ExerciseWidget(
-                  name: _ejercicios[index].name,
-                  color: _ejercicios[index].color,
-                )),
+          final ejercicio = _ejercicios[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: InkWell(
+              child: ExerciseWidget(
+                name: ejercicio.name,
+                color: ejercicio.color,
+                icon: ejercicio.icono,
+              ),
+              onTap: () {
+                gotoExercise(ejercicio);
+              },
+            ),
           );
         });
   }
