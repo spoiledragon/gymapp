@@ -47,9 +47,12 @@ class Main_Page extends ConsumerWidget {
           IconButton(onPressed: changeColor, icon: Icon(Icons.dark_mode))
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        _addExercise();
-      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addExercise();
+        },
+        backgroundColor: Colors.orangeAccent,
+      ),
       body: _ejercicios.isEmpty
           ? Center(child: Text("No Hay ejercicios"))
           : Center(
@@ -78,18 +81,31 @@ class Main_Page extends ConsumerWidget {
 
       //!Bottom Navigation
 
-      bottomNavigationBar: BottomNavigationBar(items: [
+      bottomNavigationBar: BottomNavigationBar(
+  
+        items: [
         BottomNavigationBarItem(
+        
           label: "Hola1",
-          icon: Icon(Icons.sports_gymnastics),
+          backgroundColor: Colors.white,
+          icon: Icon(
+            Icons.sports_gymnastics,
+            color: Colors.orangeAccent,
+          ),
         ),
         BottomNavigationBarItem(
           label: "Hola2",
-          icon: Icon(Icons.sports_gymnastics),
+          icon: Icon(
+            Icons.sports_gymnastics,
+            color: Colors.orangeAccent,
+          ),
         ),
         BottomNavigationBarItem(
           label: "Hola3",
-          icon: Icon(Icons.sports_gymnastics),
+          icon: Icon(
+            Icons.sports_gymnastics,
+            color: Colors.orangeAccent,
+          ),
         ),
       ]),
     );

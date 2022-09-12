@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class ExerciseWidget extends StatefulWidget {
   String name;
   Color? color;
-  IconData? icon;
+  String? group;
 
-  ExerciseWidget({required this.name, required this.color, this.icon});
+  ExerciseWidget({required this.name, required this.color, this.group});
 
   @override
   State<ExerciseWidget> createState() => _ExerciseWidgetState();
@@ -28,7 +28,6 @@ class _ExerciseWidgetState extends State<ExerciseWidget> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(widget.icon),
               Text(
                 widget.name,
                 style: GoogleFonts.karla(fontSize: 20),

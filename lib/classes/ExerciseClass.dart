@@ -10,25 +10,25 @@ class Exercise {
       required this.day,
       required this.weight,
       required this.color,
-      required this.icono});
+      required this.group});
 
   // Todas las propiedades deben ser `final` en nuestra clase.
   final String name;
   final String day;
   final int weight;
   final Color color;
-  final IconData icono;
+  final String group;
 
   // Como `Todo` es inmutable, implementamos un método que permite clonar el
   // `Todo` con un contenido ligeramente diferente.
   Exercise copyWith(
-      {String? name, String? day, int? weight, Color? color, IconData? icono}) {
+      {String? name, String? day, int? weight, Color? color, String? group}) {
     return Exercise(
       name: name ?? this.name,
       day: day ?? this.day,
       weight: weight ?? this.weight,
       color: color ?? this.color,
-      icono: icono ?? this.icono,
+      group: group ?? this.group,
     );
   }
 }

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gymapp/IconPicker/iconpicker.dart';
+
 import 'package:gymapp/classes/ExerciseClass.dart';
 
 class AddExercise_class extends ConsumerStatefulWidget {
@@ -12,41 +14,60 @@ class AddExercise_class extends ConsumerStatefulWidget {
       _AddExercise_classState();
 }
 
+//PROVIDERS
 final colorProvider = StateProvider<Color>((ref) => Colors.primaries.last);
-final iconProvider = StateProvider<IconData>((ref) => Icons.favorite);
+final groupProvider = StateProvider<int>((ref) => 1);
 
 class _AddExercise_classState extends ConsumerState<AddExercise_class> {
   //Controllers
   final nameController = TextEditingController();
+  final weightController = TextEditingController();
 
   //vars
   String? error;
+  final List<String> _groupNames = <String>[
+    "Chest",
+    "Leg",
+    "Arm",
+    "Shoulder",
+    "Other"
+  ];
 
   //Metodos
   _onsave() {
     final name = nameController.text.trim();
     if (name.isNotEmpty) {
       final finalcolor = ref.read(colorProvider.state);
+
       final retornado = Exercise(
           day: "Today",
           name: name,
-          weight: 999,
+          weight: int.parse(weightController.text),
           color: finalcolor.state,
-          icono: ref.read(iconProvider));
+          group: _groupNames[ref.read(groupProvider)]);
       Navigator.of(context).pop(retornado);
     } else {}
   }
 
-  Future<void> _changeIcon() async {
-    final result = await showDialog(
-      context: context,
-      builder: (_) => IconPicker(),
-    );
-
-    if (result != ref.read(iconProvider)) {
-      print(iconProvider.state.toString());
-      ref.watch(iconProvider.state).state = result;
-    }
+  //cupertino picker
+  void _showDialog(Widget child) {
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+              height: 216,
+              padding: const EdgeInsets.only(top: 6.0),
+              // The Bottom margin is provided to align the popup above the system navigation bar.
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              // Provide a background color for the popup.
+              color: Colors.white,
+              // Use a SafeArea widget to avoid system overlaps.
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+            ));
   }
 
   @override
@@ -69,32 +90,88 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    InkWell(
-                      child: Icon(
-                        ref.read(iconProvider),
-                        size: 50,
-                      ),
-                      onTap: () {
-                        _changeIcon();
-                      },
-                    ),
                     Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       child: TextField(
                         controller: nameController,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.karla(color: Colors.black),
+                        style: GoogleFonts.karla(
+                            color: Colors.white, fontSize: 15),
                         decoration: InputDecoration(
-                          hintText: "Exercise Name",
+                          prefixIcon: Icon(Icons.abc_outlined),
+                          hintText: "Name",
                           border: InputBorder.none,
                         ),
                       ),
                     ),
-                    CheckboxListTile(
-                      value: false,
-                      onChanged: (val) {},
-                      title: Text("Hey"),
-                    )
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all()),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 50),
+                        child: TextField(
+                          controller: weightController,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(3),
+                          ],
+                          style: GoogleFonts.karla(
+                              color: Colors.white, fontSize: 15),
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.fitness_center),
+                            suffix: Text("Lb"),
+                            hintText: "Weight",
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    //CUPERTINO PICKER
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                            child: Text(
+                          "Group : ",
+                          style: GoogleFonts.karla(),
+                        )),
+                        CupertinoButton(
+                          child: Center(
+                            child: Text(
+                              _groupNames[ref.watch(groupProvider)],
+                              style: GoogleFonts.karla(color: Colors.white70),
+                            ),
+                          ),
+                          onPressed: () => _showDialog(
+                            CupertinoPicker(
+                              magnification: 1.22,
+                              squeeze: 1.2,
+                              useMagnifier: true,
+                              itemExtent: 32,
+                              looping: true,
+                              // This is called when selected item is changed.
+                              onSelectedItemChanged: (int selectedItem) {
+                                ref.watch(groupProvider.state).state =
+                                    selectedItem;
+                              },
+                              children: List<Widget>.generate(
+                                  _groupNames.length, (int index) {
+                                return Center(
+                                  child: Text(
+                                    _groupNames[index],
+                                    style: GoogleFonts.karla(),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

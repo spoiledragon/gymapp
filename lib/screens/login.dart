@@ -89,9 +89,9 @@ class _login_pageState extends State<login_page> {
                 height: 30,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width / 3,
+                  width: MediaQuery.of(context).size.width / 1.5,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(12),
@@ -115,7 +115,7 @@ class _login_pageState extends State<login_page> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
-                   width: MediaQuery.of(context).size.width / 3,
+                  width: MediaQuery.of(context).size.width / 1.5,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(12),
@@ -142,10 +142,10 @@ class _login_pageState extends State<login_page> {
                 child: GestureDetector(
                   onTap: () => loginbtn(),
                   child: Container(
-                     width: MediaQuery.of(context).size.width / 5,
+                    width: MediaQuery.of(context).size.width / 3,
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple,
+                      color: Colors.orangeAccent,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(

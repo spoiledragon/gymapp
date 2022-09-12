@@ -38,7 +38,7 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
               child: ExerciseWidget(
                 name: ejercicio.name,
                 color: ejercicio.color,
-                icon: ejercicio.icono,
+                group: ejercicio.group,
               ),
               onTap: () {
                 gotoExercise(ejercicio);
