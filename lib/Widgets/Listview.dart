@@ -37,11 +37,14 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
             child: InkWell(
               child: ExerciseWidget(
                 name: ejercicio.name,
-                color: ejercicio.color,
                 group: ejercicio.group,
               ),
               onTap: () {
                 gotoExercise(ejercicio);
+              },
+              onLongPress: () {
+                //aqui deberia haber un minimodal pero pura verga papi
+                ref.watch(ExerciseProvider.notifier).removeExercise(ejercicio.name);
               },
             ),
           );

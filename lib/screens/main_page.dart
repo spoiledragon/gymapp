@@ -37,6 +37,7 @@ class Main_Page extends ConsumerWidget {
 
       if (result != null) {
         ref.watch(ExerciseProvider.notifier).addExercise(result);
+        //se lo mandamos a nuestro notificador
       }
     }
 
@@ -81,11 +82,8 @@ class Main_Page extends ConsumerWidget {
 
       //!Bottom Navigation
 
-      bottomNavigationBar: BottomNavigationBar(
-  
-        items: [
+      bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(
-        
           label: "Hola1",
           backgroundColor: Colors.white,
           icon: Icon(

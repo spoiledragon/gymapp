@@ -6,7 +6,7 @@ class ExerciseWidget extends StatefulWidget {
   Color? color;
   String? group;
 
-  ExerciseWidget({required this.name, required this.color, this.group});
+  ExerciseWidget({required this.name, this.group});
 
   @override
   State<ExerciseWidget> createState() => _ExerciseWidgetState();

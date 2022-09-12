@@ -36,15 +36,16 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
   //Metodos
   _onsave() {
     final name = nameController.text.trim();
+    //si no esta vacio lo quie se ha regresado
     if (name.isNotEmpty) {
       final finalcolor = ref.read(colorProvider.state);
-
+      //creamso un objeto ejercicio que sera agregado a la lista
       final retornado = Exercise(
           day: "Today",
           name: name,
           weight: int.parse(weightController.text),
-          color: finalcolor.state,
           group: _groupNames[ref.read(groupProvider)]);
+
       Navigator.of(context).pop(retornado);
     } else {}
   }
@@ -88,89 +89,65 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                 color: ref.read(colorProvider),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
+
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: TextField(
-                        controller: nameController,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.karla(
-                            color: Colors.white, fontSize: 15),
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.abc_outlined),
-                          hintText: "Name",
-                          border: InputBorder.none,
-                        ),
+                    TextField(
+                      controller: nameController,
+                      textAlign: TextAlign.center,
+                      style:
+                          GoogleFonts.karla(color: Colors.white, fontSize: 15),
+                      decoration: InputDecoration(
+
+                        hintText: "Name",
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all()),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 50),
-                        child: TextField(
-                          controller: weightController,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(3),
-                          ],
-                          style: GoogleFonts.karla(
-                              color: Colors.white, fontSize: 15),
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.fitness_center),
-                            suffix: Text("Lb"),
-                            hintText: "Weight",
-                            border: InputBorder.none,
-                          ),
-                        ),
+                    TextField(
+                      controller: weightController,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(3),
+                      ],
+                      style:
+                          GoogleFonts.karla(color: Colors.white, fontSize: 15),
+                      decoration: InputDecoration(
+                        hintText: "Weight",
+                        border: InputBorder.none,
                       ),
                     ),
 
                     //CUPERTINO PICKER
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(
-                            child: Text(
-                          "Group : ",
-                          style: GoogleFonts.karla(),
-                        )),
-                        CupertinoButton(
-                          child: Center(
-                            child: Text(
-                              _groupNames[ref.watch(groupProvider)],
-                              style: GoogleFonts.karla(color: Colors.white70),
-                            ),
-                          ),
-                          onPressed: () => _showDialog(
-                            CupertinoPicker(
-                              magnification: 1.22,
-                              squeeze: 1.2,
-                              useMagnifier: true,
-                              itemExtent: 32,
-                              looping: true,
-                              // This is called when selected item is changed.
-                              onSelectedItemChanged: (int selectedItem) {
-                                ref.watch(groupProvider.state).state =
-                                    selectedItem;
-                              },
-                              children: List<Widget>.generate(
-                                  _groupNames.length, (int index) {
-                                return Center(
-                                  child: Text(
-                                    _groupNames[index],
-                                    style: GoogleFonts.karla(),
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
+
+                    CupertinoButton(
+                      child: Center(
+                        child: Text(
+                          _groupNames[ref.watch(groupProvider)],
+                          style: GoogleFonts.karla(color: Colors.white70),
                         ),
-                      ],
+                      ),
+                      onPressed: () => _showDialog(
+                        CupertinoPicker(
+                          magnification: 1.22,
+                          squeeze: 1.2,
+                          useMagnifier: true,
+                          itemExtent: 32,
+                          looping: true,
+
+                          // This is called when selected item is changed.
+                          onSelectedItemChanged: (int selectedItem) {
+                            ref.watch(groupProvider.state).state = selectedItem;
+                          },
+                          children: List<Widget>.generate(_groupNames.length,
+                              (int index) {
+                            return Center(
+                              child: Text(
+                                _groupNames[index],
+                                style: GoogleFonts.karla(),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
                     ),
                   ],
                 ),

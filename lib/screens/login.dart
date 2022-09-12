@@ -1,19 +1,23 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymapp/classes/ExerciseClass.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/screens/main_page.dart';
 
-class login_page extends StatefulWidget {
+class login_page extends ConsumerStatefulWidget {
   const login_page({Key? key}) : super(key: key);
 
   @override
-  State<login_page> createState() => _login_pageState();
+  ConsumerState<login_page> createState() => _login_pageState();
 }
 
-class _login_pageState extends State<login_page> {
+class _login_pageState extends ConsumerState<login_page> {
   final userController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -48,11 +52,23 @@ class _login_pageState extends State<login_page> {
         _userKeys.setString('password', passwordController.text);
       });
       print("Entras papito");
+      //se supone que entras
+
+      //cargamos los datos de esta madrinola
+      final List<dynamic> jsonData =
+          jsonDecode(_userKeys.getString('Exercises') ?? '[]');
+      //ya aqui tenemos los datos para ser almacenados en donde quieras
+      for (var Exe in jsonData) {
+        Exercise x = Exercise.fromJson(Exe);
+        ref.watch(ExerciseProvider.notifier).addExercise(x);
+      }
+
+      //empujamos a la siguiente pestaña
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Main_Page(Username: userController.text)));
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("User or Password ")));
+          .showSnackBar(SnackBar(content: Text("User or Password Invalid")));
     }
   }
 
