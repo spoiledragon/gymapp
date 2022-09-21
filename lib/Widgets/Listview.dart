@@ -44,7 +44,9 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
               },
               onLongPress: () {
                 //aqui deberia haber un minimodal pero pura verga papi
-                ref.watch(ExerciseProvider.notifier).removeExercise(ejercicio.name);
+                ref
+                    .watch(ExerciseProvider.notifier)
+                    .removeExercise(ejercicio.name);
               },
             ),
           );
