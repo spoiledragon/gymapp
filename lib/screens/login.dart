@@ -40,6 +40,27 @@ class _login_pageState extends ConsumerState<login_page> {
       userController.text = (userKeys.getString('username') ?? "");
       passwordController.text = (userKeys.getString('password') ?? "");
     });
+
+    if (userController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      Loginsuccess();
+    }
+  }
+
+  void Loginsuccess() async {
+//se supone que entras
+    final _userKeys = await SharedPreferences.getInstance();
+    //cargamos los datos de esta madrinola
+    final List<dynamic> jsonData =
+        jsonDecode(_userKeys.getString('Exercises') ?? '[]');
+    //ya aqui tenemos los datos para ser almacenados en donde quieras
+    for (var Exe in jsonData) {
+      Exercise x = Exercise.fromJson(Exe);
+      ref.watch(ExerciseProvider.notifier).addExercise(x);
+    }
+
+    //empujamos a la siguiente pestaña
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Main_Page(Username: userController.text)));
   }
 
   Future<void> loginbtn() async {
@@ -52,20 +73,7 @@ class _login_pageState extends ConsumerState<login_page> {
         _userKeys.setString('password', passwordController.text);
       });
       print("Entras papito");
-      //se supone que entras
-
-      //cargamos los datos de esta madrinola
-      final List<dynamic> jsonData =
-          jsonDecode(_userKeys.getString('Exercises') ?? '[]');
-      //ya aqui tenemos los datos para ser almacenados en donde quieras
-      for (var Exe in jsonData) {
-        Exercise x = Exercise.fromJson(Exe);
-        ref.watch(ExerciseProvider.notifier).addExercise(x);
-      }
-
-      //empujamos a la siguiente pestaña
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Main_Page(Username: userController.text)));
+      Loginsuccess();
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("User or Password Invalid")));

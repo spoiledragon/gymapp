@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gymapp/states/states.dart';
@@ -13,6 +14,7 @@ class _clockPageState extends ConsumerState<clockPage> {
   @override
   Widget build(BuildContext context) {
     int seconds = ref.watch(secondsTimeProvider);
+
     //Timer? timer;
 
     return Scaffold(
@@ -36,5 +38,9 @@ class _clockPageState extends ConsumerState<clockPage> {
     return Text("$seconds");
   }
 
-  starttimer() {}
+  starttimer() async {
+    Timer(Duration(seconds: ref.watch(secondsTimeProvider)), () {
+      print('Yeah, this line is printed after 3 seconds');
+    });
+  }
 }
