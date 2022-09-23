@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +12,6 @@ class Exercise {
       {required this.name,
       required this.day,
       required this.weight,
-
       required this.group});
 
   // Todas las propiedades deben ser `final` en nuestra clase.
@@ -25,7 +26,6 @@ class Exercise {
         'name': name,
         'day': day,
         'weight': weight,
-
         'group': group,
       };
 
@@ -34,7 +34,6 @@ class Exercise {
         day: json["day"],
         weight: json["weight"],
         group: json["group"],
-
       );
   // Como `Todo` es inmutable, implementamos un método que permite clonar el
   // `Todo` con un contenido ligeramente diferente.
@@ -44,7 +43,6 @@ class Exercise {
       name: name ?? this.name,
       day: day ?? this.day,
       weight: weight ?? this.weight,
-
       group: group ?? this.group,
     );
   }
