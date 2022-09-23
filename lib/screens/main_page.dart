@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +36,7 @@ class Main_Page extends ConsumerWidget {
           IconButton(onPressed: changeColor, icon: Icon(Icons.dark_mode))
         ],
       ),
-      body: IndexedStack(index: index, children:ScreensPages),
+      body: IndexedStack(index: index, children: ScreensPages),
 
       //!Bottom Navigation
 

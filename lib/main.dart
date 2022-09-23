@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gymapp/screens/login.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymapp/screens/splashScreen.dart';
 import './states/states.dart';
 
 // Creamos un "provider", el cual almacenará un valor (aquí "Hello world").
@@ -24,7 +24,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
       title: 'Flutter Demo',
-      home: login_page(),
+      home: SplashScreen(),
     );
   }
 }

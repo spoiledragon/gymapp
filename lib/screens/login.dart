@@ -11,8 +11,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/screens/main_page.dart';
 
 class login_page extends ConsumerStatefulWidget {
-  const login_page({Key? key}) : super(key: key);
-
   @override
   ConsumerState<login_page> createState() => _login_pageState();
 }
@@ -23,7 +21,7 @@ class _login_pageState extends ConsumerState<login_page> {
 
   @override
   void initState() {
-    loadKeys();
+    //loadKeys();
     super.initState();
   }
 
@@ -34,35 +32,6 @@ class _login_pageState extends ConsumerState<login_page> {
     super.dispose();
   }
 
-  Future<void> loadKeys() async {
-    final userKeys = await SharedPreferences.getInstance();
-    setState(() {
-      userController.text = (userKeys.getString('username') ?? "");
-      passwordController.text = (userKeys.getString('password') ?? "");
-    });
-
-    if (userController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      Loginsuccess();
-    }
-  }
-
-  void Loginsuccess() async {
-//se supone que entras
-    final _userKeys = await SharedPreferences.getInstance();
-    //cargamos los datos de esta madrinola
-    final List<dynamic> jsonData =
-        jsonDecode(_userKeys.getString('Exercises') ?? '[]');
-    //ya aqui tenemos los datos para ser almacenados en donde quieras
-    for (var Exe in jsonData) {
-      Exercise x = Exercise.fromJson(Exe);
-      ref.watch(ExerciseProvider.notifier).addExercise(x);
-    }
-
-    //empujamos a la siguiente pestaña
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Main_Page(Username: userController.text)));
-  }
-
   Future<void> loginbtn() async {
     if ((userController.text == "spoiled") &&
         (passwordController.text == "digimon123")) {
@@ -71,9 +40,11 @@ class _login_pageState extends ConsumerState<login_page> {
         print("se ha guardado" + userController.text);
         _userKeys.setString('username', userController.text);
         _userKeys.setString('password', passwordController.text);
+        _userKeys.setBool("Loged", true);
       });
       print("Entras papito");
-      Loginsuccess();
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Main_Page(Username: userController.text)));
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("User or Password Invalid")));
