@@ -24,32 +24,33 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
   @override
   Widget build(BuildContext context) {
     List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
-    return ListView.builder(
-        physics: ClampingScrollPhysics(),
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: _ejercicios.length,
-        //!Creador de la lista en horizontal
-        itemBuilder: (BuildContext context, int index) {
-          final ejercicio = _ejercicios[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            child: InkWell(
-              child: ExerciseWidget(
-                name: ejercicio.name,
-                group: ejercicio.group,
-              ),
-              onTap: () {
-                gotoExercise(ejercicio);
-              },
-              onLongPress: () {
-                //aqui deberia haber un minimodal pero pura verga papi
-                ref
-                    .watch(ExerciseProvider.notifier)
-                    .removeExercise(ejercicio.name);
-              },
+    return GridView.builder(
+      scrollDirection: Axis.vertical,
+      gridDelegate:
+          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      itemCount: _ejercicios.length,
+      itemBuilder: ((context, index) {
+        final ejercicio = _ejercicios[index];
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          child: InkWell(
+            onTap: () {
+              gotoExercise(ejercicio);
+            },
+            onLongPress: () {
+              //aqui deberia haber un minimodal pero pura verga papi
+              ref
+                  .watch(ExerciseProvider.notifier)
+                  .removeExercise(ejercicio.name);
+            },
+            child: ExerciseWidget(
+              name: ejercicio.name,
+              group: ejercicio.group,
             ),
-          );
-        });
+          ),
+        );
+      }),
+    );
   }
 }

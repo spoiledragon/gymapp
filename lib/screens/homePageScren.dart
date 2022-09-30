@@ -58,15 +58,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     style: GoogleFonts.bebasNeue(
                         fontSize: 30, color: Colors.white),
                   ),
-                  SizedBox(
-                    height: 150.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ExerciseList(),
-                        ),
-                      ],
-                    ),
+                  Expanded(
+                    child: ExerciseList(),
                   ),
                 ],
               ),

@@ -15,7 +15,6 @@ class AddExercise_class extends ConsumerStatefulWidget {
 }
 
 //PROVIDERS
-final colorProvider = StateProvider<Color>((ref) => Colors.primaries.last);
 final groupProvider = StateProvider<int>((ref) => 1);
 
 class _AddExercise_classState extends ConsumerState<AddExercise_class> {
@@ -30,6 +29,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
     "Leg",
     "Arm",
     "Shoulder",
+    "Back",
     "Other"
   ];
 
@@ -38,7 +38,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
     final name = nameController.text.trim();
     //si no esta vacio lo quie se ha regresado
     if (name.isNotEmpty) {
-      final finalcolor = ref.read(colorProvider.state);
+      
       //creamso un objeto ejercicio que sera agregado a la lista
       final retornado = Exercise(
           day: "Today",
@@ -86,7 +86,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
             Expanded(
               flex: 2,
               child: Container(
-                color: ref.read(colorProvider),
+                color: Colors.black12,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
 
@@ -153,30 +153,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                 ),
               ),
             ),
-            Expanded(
-              child: GridView.builder(
-                scrollDirection: Axis.horizontal,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemCount: Colors.primaries.length,
-                itemBuilder: ((context, index) {
-                  final color = Colors.primaries[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 15),
-                    child: InkWell(
-                      onTap: () {
-                        ref.watch(colorProvider.state).state = color;
-                      },
-                      child: CircleAvatar(
-                        radius: 5,
-                        backgroundColor: color,
-                      ),
-                    ),
-                  );
-                }),
-              ),
-            ),
+            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MaterialButton(

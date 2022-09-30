@@ -16,18 +16,16 @@ final runingProvider = StateProvider<bool>((ref) => false);
 class _clockPageState extends ConsumerState<clockPage> {
   @override
   Widget build(BuildContext context) {
-    //Providers
     int ticks = ref.watch(secondtickProvider);
-    bool isRunning = ref.watch(runingProvider);
-//Vars
     Timer? timer;
+    bool isRunning = ref.watch(runingProvider);
 
     //FUNCIONES
 
     void stopTimer() {
       print("cancelado");
       timer?.cancel();
-      isRunning = false;
+      ref.watch(runingProvider.state).state = false;
       print(isRunning);
     }
 

@@ -18,7 +18,6 @@ class Exercise {
   final String name;
   final String day;
   final int weight;
-
   final String group;
 
 //serializacion a json
