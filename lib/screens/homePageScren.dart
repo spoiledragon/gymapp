@@ -3,11 +3,9 @@ import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/classes/ExerciseClass.dart';
 import 'package:intl/intl.dart';
-import "package:gymapp/states/states.dart";
 import 'package:gymapp/screens/addExercise_screen.dart';
 
 import '../Widgets/Listview.dart';
-
 
 class HomePage extends ConsumerStatefulWidget {
   @override
@@ -22,7 +20,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     //valores
     var today = DateFormat('EEEE').format(DateTime.now());
     //Funciones
-    
 
     //funciones
 
@@ -39,7 +36,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
 
     return Scaffold(
-      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _addExercise();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gymapp/screens/login.dart';
 import 'package:gymapp/screens/main_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymapp/states/states.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,13 +26,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final log = prefs.getBool("Loged") ?? false;
     print(log);
-
+    //SI no esta logeado entonces te manda a el login page
     if (log == false) {
       print("no esta logeado");
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => login_page()));
     } else {
       String username = prefs.getString("username").toString();
+      ref.read(maingymBroProvider.state).state = username;
 
       //se supone que entras
       //!AQUI CARGAMOS LOS DATOS Y LOS MANDO A RIVERPOD

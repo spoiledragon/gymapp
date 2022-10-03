@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:gymapp/screens/clockPage.dart';
+
 import 'package:gymapp/screens/homePageScren.dart';
+import 'package:gymapp/screens/trackPage.dart';
 
 import "package:gymapp/states/states.dart";
 
@@ -12,7 +13,7 @@ class Main_Page extends ConsumerWidget {
 //@listas
   final ScreensPages = [
     HomePage(),
-    clockPage(),
+    trackPage(),
   ];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +55,7 @@ class Main_Page extends ConsumerWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'School',
+            label: 'Tracking',
             backgroundColor: Colors.purple,
           ),
           BottomNavigationBarItem(
