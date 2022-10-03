@@ -24,10 +24,8 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
   @override
   Widget build(BuildContext context) {
     List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
-    return GridView.builder(
+    return ListView.builder(
       scrollDirection: Axis.vertical,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       itemCount: _ejercicios.length,
       itemBuilder: ((context, index) {
         final ejercicio = _ejercicios[index];

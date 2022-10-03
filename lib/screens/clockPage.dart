@@ -11,34 +11,43 @@ class clockPage extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _clockPageState();
 }
 
-final runingProvider = StateProvider<bool>((ref) => false);
-
 class _clockPageState extends ConsumerState<clockPage> {
   @override
   Widget build(BuildContext context) {
+    int TotalTimer = ref.read(TimeGlobalProvider);
     int ticks = ref.watch(secondtickProvider);
     Timer? timer;
     bool isRunning = ref.watch(runingProvider);
 
     //FUNCIONES
 
-    void stopTimer() {
-      print("cancelado");
-      timer?.cancel();
-      ref.watch(runingProvider.state).state = false;
+    void pauseTimer() {
+      print("Pausado");
+      ref.read(runingProvider.state).state = false;
       print(isRunning);
+      timer?.cancel();
     }
 
-    void starttimer() async {
+    void stopTimer() {
+      print("cancelado");
+      ref.read(runingProvider.state).state = false;
+      ref.read(secondtickProvider.state).state = ref.read(TimeGlobalProvider);
+      print(isRunning);
+      timer?.cancel();
+    }
+
+    void starttimer() {
       ref.read(runingProvider.state).state = true;
-      if (ticks > 0 && !isRunning) {
-        timer = Timer.periodic(Duration(seconds: 1), (Timer) {
+      //comienza el cronometro
+      timer = Timer.periodic(Duration(seconds: 1), (Timer) {
+        //el no va a parar
+        if (ticks > 0 && ref.read(runingProvider) == true) {
           ticks = ref.watch(secondtickProvider.state).state--;
           print(ticks);
-        });
-      } else {
-        stopTimer();
-      }
+        } else {
+          stopTimer();
+        }
+      });
     }
 
     return Scaffold(
@@ -56,7 +65,9 @@ class _clockPageState extends ConsumerState<clockPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         MaterialButton(
-                          onPressed: (() => {}),
+                          onPressed: (() => {
+                                stopTimer(),
+                              }),
                           child: Text("Pause"),
                         ),
                         MaterialButton(
