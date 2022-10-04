@@ -18,8 +18,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   void initState() {
     var ab = json.decode(widget.ejercicio.day);
     print(ab);
-    for(String dia in ab){
-      print(dia);
+    for (String dia in ab) {
+      dias.add(dia);
     }
     super.initState();
   }

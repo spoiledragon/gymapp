@@ -18,13 +18,12 @@ class _clockPage1State extends ConsumerState<clockPage1> {
     int ticks = ref.watch(secondtickProvider);
     Timer? timer;
     bool isRunning = ref.watch(runingProvider);
-
+    bool canRun = true;
     //FUNCIONES
 
     void pauseTimer() {
       print("Pausado");
       ref.read(runingProvider.state).state = false;
-      print(isRunning);
       timer?.cancel();
     }
 
@@ -32,53 +31,83 @@ class _clockPage1State extends ConsumerState<clockPage1> {
       print("cancelado");
       ref.read(runingProvider.state).state = false;
       ref.read(secondtickProvider.state).state = ref.read(TimeGlobalProvider);
-      print(isRunning);
       timer?.cancel();
     }
 
     void starttimer() {
-      ref.read(runingProvider.state).state = true;
-      //comienza el cronometro
-      timer = Timer.periodic(Duration(milliseconds: 1), (Timer) {
-        //el no va a parar
-        if (ticks > 1 && ref.read(runingProvider) == true) {
-          ticks = ref.watch(secondtickProvider.state).state--;
-          print(ticks);
-        } else {
-          stopTimer();
-        }
-      });
+      if (ref.read(runingProvider) == false) {
+        ref.read(runingProvider.state).state = true;
+        timer = Timer.periodic(Duration(seconds: 1), (Timer) {
+          //el no va a parar
+          if (ticks > 1 && ref.read(runingProvider)) {
+            ref.read(secondtickProvider.state).state--;
+            print(ticks);
+          }
+        });
+      }
     }
+
+    Widget buildTime() => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(ref.read(maingymBroProvider)),
+            Text(
+              "$ticks",
+              style: GoogleFonts.bebasNeue(fontSize: 60, color: Colors.white),
+            ),
+          ],
+        );
+
+    Widget buildTimer() => SizedBox(
+          width: 150,
+          height: 150,
+          child: Stack(fit: StackFit.expand, children: [
+            CircularProgressIndicator(
+              strokeWidth: 12,
+              value: ticks / ref.read(TimeGlobalProvider),
+            ),
+            Center(child: buildTime())
+          ]),
+        );
+
+    Widget buildButtons() => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 50,
+            ),
+            InkWell(
+              onTap: (() => {
+                    pauseTimer(),
+                  }),
+              child: Text("Pause"),
+            ),
+            InkWell(
+              onTap: (() => {
+                    stopTimer(),
+                  }),
+              child: Text("Cancel"),
+            ),
+          ],
+        );
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(ref.read(maingymBroProvider)),
-        Text(
-          "$ticks",
-          style: GoogleFonts.bebasNeue(fontSize: 60, color: Colors.white),
-        ),
+        //esta corriendo?
         isRunning
+            //Si
             ? Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(
                   children: [
-                    MaterialButton(
-                      onPressed: (() => {
-                            pauseTimer(),
-                          }),
-                      child: Text("Pause"),
-                    ),
-                    MaterialButton(
-                      onPressed: (() => {
-                            stopTimer(),
-                          }),
-                      child: Text("Cancel"),
-                    ),
+                    buildTimer(),
+                    buildButtons(),
                   ],
                 ),
               )
-            : MaterialButton(
+            :
+            //No
+            MaterialButton(
                 onPressed: (() => starttimer()),
                 child: Text("Start"),
               ),

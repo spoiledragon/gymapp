@@ -18,9 +18,9 @@ class _trackPageState extends State<trackPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           clockPage1(),
-           Divider(),
-           clockPage2(),
+            clockPage1(),
+            Divider(),
+            clockPage2(),
           ],
         ),
       ),
