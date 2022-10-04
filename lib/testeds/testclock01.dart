@@ -39,13 +39,13 @@ class _clockPage1State extends ConsumerState<clockPage1> {
     void starttimer() {
       ref.read(runingProvider.state).state = true;
       //comienza el cronometro
-      timer = Timer.periodic(Duration(seconds: 1), (Timer) {
+      timer = Timer.periodic(Duration(milliseconds: 1), (Timer) {
         //el no va a parar
         if (ticks > 1 && ref.read(runingProvider) == true) {
           ticks = ref.watch(secondtickProvider.state).state--;
           print(ticks);
         } else {
-          pauseTimer();
+          stopTimer();
         }
       });
     }

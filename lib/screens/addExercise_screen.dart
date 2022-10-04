@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:gymapp/classes/ExerciseClass.dart';
+import 'package:day_picker/day_picker.dart';
+import 'package:day_picker/model/day_in_week.dart';
 
 class AddExercise_class extends ConsumerStatefulWidget {
   const AddExercise_class({Key? key}) : super(key: key);
@@ -32,16 +33,47 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
     "Back",
     "Other"
   ];
+  //Lista de dias
+  List<DayInWeek> _days = [
+    DayInWeek(
+      "Monday",
+    ),
+    DayInWeek(
+      "Tuesday",
+    ),
+    DayInWeek(
+      "Wednesday ",
+    ),
+    DayInWeek(
+      "Thursday ",
+    ),
+    DayInWeek(
+      "Friday ",
+    ),
+    DayInWeek(
+      "Saturday",
+    ),
+    DayInWeek(
+      "Sunday",
+    ),
+  ];
+  List<String> DiasString = [];
 
   //Metodos
   _onsave() {
     final name = nameController.text.trim();
     //si no esta vacio lo quie se ha regresado
     if (name.isNotEmpty) {
-      
       //creamso un objeto ejercicio que sera agregado a la lista
+      for (DayInWeek dia in _days) {
+        if (dia.isSelected) {
+          String temp = '"' + dia.dayName + '"';
+          DiasString.add(temp);
+        }
+      }
+
       final retornado = Exercise(
-          day: "Today",
+          day: DiasString.toString(),
           name: name,
           weight: int.parse(weightController.text),
           group: _groupNames[ref.read(groupProvider)]);
@@ -89,7 +121,6 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                 color: Colors.black12,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: [
                     TextField(
                       controller: nameController,
@@ -97,7 +128,6 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                       style:
                           GoogleFonts.karla(color: Colors.white, fontSize: 15),
                       decoration: InputDecoration(
-
                         hintText: "Name",
                       ),
                     ),
@@ -149,11 +179,19 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                         ),
                       ),
                     ),
+                    //Dias de la Semana
+                    SelectWeekDays(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      days: _days,
+                      onSelect: (values) {
+                        print(values);
+                      },
+                    ),
                   ],
                 ),
               ),
             ),
-            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MaterialButton(

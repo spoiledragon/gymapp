@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import 'package:gymapp/screens/homePageScren.dart';
 import 'package:gymapp/screens/trackPage.dart';
 

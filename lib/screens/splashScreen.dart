@@ -32,6 +32,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => login_page()));
     } else {
+      //Si hay datos entonces
       String username = prefs.getString("username").toString();
       ref.read(maingymBroProvider.state).state = username;
 
@@ -46,7 +47,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         ref.read(ExerciseProvider.notifier).addExercise(x);
       }
 
-      Navigator.of(context).push(MaterialPageRoute(
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => Main_Page(Username: username)));
     }
   }

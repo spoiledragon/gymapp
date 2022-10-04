@@ -44,7 +44,7 @@ class _clockPage2State extends ConsumerState<clockPage2> {
           ticks = ref.watch(secondtickProvider2.state).state--;
           print(ticks);
         } else {
-          pauseTimer();
+          stopTimer();
         }
       });
     }
