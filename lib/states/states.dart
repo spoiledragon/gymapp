@@ -10,6 +10,7 @@ final TimeGlobalProvider = Provider<int>((ref) {
 final gymBroProvider = StateProvider<String>((ref) {
   return "Matthew";
 });
+
 final maingymBroProvider = StateProvider<String>((ref) => "");
 
 final runingProvider = StateProvider<bool>((ref) => false);

@@ -13,16 +13,15 @@ class clockPage2 extends ConsumerStatefulWidget {
 
 class _clockPage2State extends ConsumerState<clockPage2> {
   @override
+  Timer? timer;
+
   Widget build(BuildContext context) {
     int TotalTimer = ref.read(TimeGlobalProvider);
     int ticks = ref.watch(secondtickProvider2);
-    Timer? timer;
     bool isRunning = ref.watch(runingProvider2);
-
     //FUNCIONES
 
     void pauseTimer() {
-      print("Pausado");
       ref.read(runingProvider2.state).state = false;
       timer?.cancel();
     }
@@ -31,57 +30,93 @@ class _clockPage2State extends ConsumerState<clockPage2> {
       print("cancelado");
       ref.read(runingProvider2.state).state = false;
       ref.read(secondtickProvider2.state).state = ref.read(TimeGlobalProvider);
-      print(isRunning);
       timer?.cancel();
     }
 
     void starttimer() {
-      ref.read(runingProvider2.state).state = true;
-      //comienza el cronometro
-      timer = Timer.periodic(Duration(seconds: 1), (Timer) {
-        //el no va a parar
-        if (ticks > 1 && ref.read(runingProvider2) == true) {
-          ticks = ref.watch(secondtickProvider2.state).state--;
-          print(ticks);
-        } else {
-          stopTimer();
-        }
-      });
+      if (ref.read(runingProvider2) == false) {
+        ref.read(runingProvider2.state).state = true;
+        //timer
+        timer = Timer.periodic(Duration(seconds: 1), (Timer) {
+          //el no va a parar
+          if (ref.read(secondtickProvider2) > 0 && ref.read(runingProvider2)) {
+            ref.read(secondtickProvider2.state).state--;
+          }
+        });
+      } else {
+        stopTimer();
+      }
     }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(ref.read(gymBroProvider)),
-        Text(
-          "$ticks",
-          style: GoogleFonts.bebasNeue(fontSize: 60, color: Colors.white),
-        ),
-        isRunning
-            ? Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MaterialButton(
-                      onPressed: (() => {
-                            pauseTimer(),
-                          }),
-                      child: Text("Pause"),
-                    ),
-                    MaterialButton(
-                      onPressed: (() => {
-                            stopTimer(),
-                          }),
-                      child: Text("Cancel"),
-                    ),
-                  ],
+    Widget buildTime() => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(ref.read(gymBroProvider)),
+            Text(
+              "$ticks",
+              style: GoogleFonts.bebasNeue(fontSize: 60, color: Colors.white),
+            ),
+          ],
+        );
+
+    Widget buildTimer() => SizedBox(
+          width: 150,
+          height: 150,
+          child: Stack(fit: StackFit.expand, children: [
+            CircularProgressIndicator(
+              strokeWidth: 12,
+              value: ticks / ref.read(TimeGlobalProvider),
+            ),
+            Center(child: buildTime())
+          ]),
+        );
+
+    Widget buildButtons() => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MaterialButton(
+              onPressed: (() => {
+                    pauseTimer(),
+                  }),
+              child: Text("Pause"),
+            ),
+            MaterialButton(
+              onPressed: (() => {
+                    stopTimer(),
+                  }),
+              child: Text("Cancel"),
+            ),
+          ],
+        );
+
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //esta corriendo?
+          isRunning
+              //Si
+              ? Center(
+                  child: Column(
+                    children: [
+                      buildTimer(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      buildButtons(),
+                    ],
+                  ),
+                )
+              :
+              //No
+              Center(
+                  child: MaterialButton(
+                    onPressed: (() => starttimer()),
+                    child: Text("Start"),
+                  ),
                 ),
-              )
-            : MaterialButton(
-                onPressed: (() => starttimer()),
-                child: Text("Start"),
-              ),
-      ],
+        ],
+      ),
     );
   }
 }

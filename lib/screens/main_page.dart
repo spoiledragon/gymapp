@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gymapp/screens/confScreen.dart';
 
 import 'package:gymapp/screens/homePageScren.dart';
 import 'package:gymapp/screens/trackPage.dart';
+import 'package:gymapp/screens/userScreen.dart';
 
 import "package:gymapp/states/states.dart";
 
@@ -10,9 +12,12 @@ class Main_Page extends ConsumerWidget {
   late String Username;
   Main_Page({required this.Username});
 //@listas
+//Pantallas que aparecen en el main
   final ScreensPages = [
     HomePage(),
     trackPage(),
+    userPage(),
+    configPage(),
   ];
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -13,16 +13,15 @@ class clockPage1 extends ConsumerStatefulWidget {
 
 class _clockPage1State extends ConsumerState<clockPage1> {
   @override
+  Timer? timer;
+
   Widget build(BuildContext context) {
     int TotalTimer = ref.read(TimeGlobalProvider);
     int ticks = ref.watch(secondtickProvider);
-    Timer? timer;
     bool isRunning = ref.watch(runingProvider);
-    bool canRun = true;
     //FUNCIONES
 
     void pauseTimer() {
-      print("Pausado");
       ref.read(runingProvider.state).state = false;
       timer?.cancel();
     }
@@ -37,13 +36,15 @@ class _clockPage1State extends ConsumerState<clockPage1> {
     void starttimer() {
       if (ref.read(runingProvider) == false) {
         ref.read(runingProvider.state).state = true;
+        //timer
         timer = Timer.periodic(Duration(seconds: 1), (Timer) {
           //el no va a parar
-          if (ticks > 1 && ref.read(runingProvider)) {
+          if (ref.read(secondtickProvider) > 0 && ref.read(runingProvider)) {
             ref.read(secondtickProvider.state).state--;
-            print(ticks);
           }
         });
+      } else {
+        stopTimer();
       }
     }
 
@@ -73,17 +74,14 @@ class _clockPage1State extends ConsumerState<clockPage1> {
     Widget buildButtons() => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 50,
-            ),
-            InkWell(
-              onTap: (() => {
+            MaterialButton(
+              onPressed: (() => {
                     pauseTimer(),
                   }),
               child: Text("Pause"),
             ),
-            InkWell(
-              onTap: (() => {
+            MaterialButton(
+              onPressed: (() => {
                     stopTimer(),
                   }),
               child: Text("Cancel"),
@@ -91,27 +89,34 @@ class _clockPage1State extends ConsumerState<clockPage1> {
           ],
         );
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        //esta corriendo?
-        isRunning
-            //Si
-            ? Center(
-                child: Column(
-                  children: [
-                    buildTimer(),
-                    buildButtons(),
-                  ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //esta corriendo?
+          isRunning
+              //Si
+              ? Center(
+                  child: Column(
+                    children: [
+                      buildTimer(),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      buildButtons(),
+                    ],
+                  ),
+                )
+              :
+              //No
+              Center(
+                  child: MaterialButton(
+                    onPressed: (() => starttimer()),
+                    child: Text("Start"),
+                  ),
                 ),
-              )
-            :
-            //No
-            MaterialButton(
-                onPressed: (() => starttimer()),
-                child: Text("Start"),
-              ),
-      ],
+        ],
+      ),
     );
   }
 }
