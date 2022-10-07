@@ -22,10 +22,10 @@ class Main_Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     changeColor() {
-      print(ref.read(DarkThemeProvider));
-      ref.watch(DarkThemeProvider)
-          ? ref.watch(DarkThemeProvider.state).state = false
-          : ref.watch(DarkThemeProvider.state).state = true;
+      print(ref.read(darkThemeProvider));
+      ref.watch(darkThemeProvider)
+          ? ref.watch(darkThemeProvider.state).state = false
+          : ref.watch(darkThemeProvider.state).state = true;
     }
 
     //providers

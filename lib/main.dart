@@ -20,7 +20,7 @@ void main() {
 class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkTheme = ref.watch(DarkThemeProvider);
+    final isDarkTheme = ref.watch(darkThemeProvider);
     return MaterialApp(
       theme: isDarkTheme ? ThemeData.dark() : ThemeData.light(),
       title: 'Flutter Demo',

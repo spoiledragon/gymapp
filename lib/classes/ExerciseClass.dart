@@ -1,23 +1,29 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
 // El estado de nuestro StateNotifier debe ser inmutable.
 // También podríamos usar paquetes como Freezed para ayudar con la implementación.
+var today = DateFormat('EEEE').format(DateTime.now());
+//var today = "Sunday";
 
 class Exercise {
   const Exercise(
       {required this.name,
       required this.day,
       required this.weight,
-      required this.group});
+      required this.group,
+      required this.color});
 
   // Todas las propiedades deben ser `final` en nuestra clase.
   final String name;
   final String day;
   final int weight;
+  final int color;
   final String group;
 
 //serializacion a json
@@ -26,6 +32,7 @@ class Exercise {
         'day': day,
         'weight': weight,
         'group': group,
+        'color': color,
       };
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
@@ -33,16 +40,18 @@ class Exercise {
         day: json["day"],
         weight: json["weight"],
         group: json["group"],
+        color: json["color"],
       );
   // Como `Todo` es inmutable, implementamos un método que permite clonar el
   // `Todo` con un contenido ligeramente diferente.
   Exercise copyWith(
-      {String? name, String? day, int? weight, Color? color, String? group}) {
+      {String? name, String? day, int? weight, int? color, String? group}) {
     return Exercise(
       name: name ?? this.name,
       day: day ?? this.day,
       weight: weight ?? this.weight,
       group: group ?? this.group,
+      color: color ?? this.color,
     );
   }
 }
@@ -87,6 +96,26 @@ class ExerciseNotifier extends StateNotifier<List<Exercise>> {
     print(state);
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('Exercises', jsonEncode(state));
+  }
+
+  List<Exercise> todayExercises() {
+    List<Exercise> _todayExercises = [];
+    //creamos lista vacia de ejercicios
+    //recorremos los ejercicios en el estado
+    for (final ejercicio in state) {
+      //creamos la vairable de dias a partir del arreglo json del ejercicio
+      final dias = ejercicio.day;
+      //creamos la variable ja encodeada
+      var diasArray = json.decode(dias);
+      //comprobamos si corresponde con el dia de hoy
+      for (String dia in diasArray) {
+        if (dia == today) {
+          print(ejercicio.name);
+          _todayExercises.add(ejercicio);
+        }
+      }
+    }
+    return _todayExercises;
   }
 }
 

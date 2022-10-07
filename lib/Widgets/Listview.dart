@@ -22,29 +22,35 @@ class _ExerciseListState extends ConsumerState<ExerciseList> {
   }
 
   @override
+  void deleItem(String name) {
+    ref.watch(ExerciseProvider.notifier).removeExercise(name);
+  }
+
   Widget build(BuildContext context) {
     List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
+    List<Exercise> _todayejercicios =
+        ref.watch(ExerciseProvider.notifier).todayExercises();
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: _ejercicios.length,
+      itemCount: _todayejercicios.length,
       itemBuilder: ((context, index) {
-        final ejercicio = _ejercicios[index];
+        final ejercicio = _todayejercicios[index];
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
           child: InkWell(
             onTap: () {
               gotoExercise(ejercicio);
             },
             onLongPress: () {
               //aqui deberia haber un minimodal pero pura verga papi
-              ref
-                  .watch(ExerciseProvider.notifier)
-                  .removeExercise(ejercicio.name);
+              deleItem(ejercicio.name);
             },
             child: ExerciseWidget(
               name: ejercicio.name,
               group: ejercicio.group,
+              selectedColor: ejercicio.color,
             ),
           ),
         );

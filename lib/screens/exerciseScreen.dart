@@ -13,9 +13,12 @@ class ExerciseScreen extends StatefulWidget {
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
   List<String> dias = [];
+  Color? color;
 
   @override
   void initState() {
+    //Convertimos el color de entero a color
+    color = Color(widget.ejercicio.color);
     var ab = json.decode(widget.ejercicio.day);
     print(ab);
     for (String dia in ab) {
@@ -33,6 +36,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         children: [
           Text(widget.ejercicio.weight.toString()),
           Text(widget.ejercicio.day),
+          CircleAvatar(
+            backgroundColor: color,
+          )
         ],
       )),
     );

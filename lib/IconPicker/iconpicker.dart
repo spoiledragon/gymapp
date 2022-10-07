@@ -12,7 +12,6 @@ class IconPicker extends StatefulWidget {
 class _IconPickerState extends State<IconPicker> {
   IconData? selectedIcon = Icons.favorite;
   final List<IconData> allIcons = [
-  
     Icons.headphones,
     Icons.home,
     Icons.fitness_center,

@@ -17,6 +17,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     //Listas
     List<Exercise> _ejercicios = ref.watch(ExerciseProvider);
+    List<Exercise> _todayejercicios =
+        ref.watch(ExerciseProvider.notifier).todayExercises();
     //valores
     var today = DateFormat('EEEE').format(DateTime.now());
     //Funciones
@@ -30,25 +32,28 @@ class _HomePageState extends ConsumerState<HomePage> {
       );
 
       if (result != null) {
-        ref.watch(ExerciseProvider.notifier).addExercise(result);
+        ref.read(ExerciseProvider.notifier).addExercise(result);
         //se lo mandamos a nuestro notificador
       }
     }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () {
           _addExercise();
         },
         backgroundColor: Colors.orangeAccent,
       ),
-      body: _ejercicios.isEmpty
+      body: _todayejercicios.isEmpty
           ? Center(child: Text("No Hay ejercicios"))
           : Center(
               //! Sale el Nombre de usuario de Inicio
-
               child: Column(
                 children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     "Today is " + today,
                     style: GoogleFonts.bebasNeue(

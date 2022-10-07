@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/classes/ExerciseClass.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:day_picker/model/day_in_week.dart';
+import 'package:gymapp/states/states.dart';
 
 class AddExercise_class extends ConsumerStatefulWidget {
   const AddExercise_class({Key? key}) : super(key: key);
@@ -42,13 +44,13 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
       "Tuesday",
     ),
     DayInWeek(
-      "Wednesday ",
+      "Wednesday",
     ),
     DayInWeek(
-      "Thursday ",
+      "Thursday",
     ),
     DayInWeek(
-      "Friday ",
+      "Friday",
     ),
     DayInWeek(
       "Saturday",
@@ -73,10 +75,12 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
       }
 
       final retornado = Exercise(
-          day: DiasString.toString(),
-          name: name,
-          weight: int.parse(weightController.text),
-          group: _groupNames[ref.read(groupProvider)]);
+        day: DiasString.toString(),
+        name: name,
+        weight: int.parse(weightController.text),
+        group: _groupNames[ref.read(groupProvider)],
+        color: ref.read(colorProvider).value,
+      );
 
       Navigator.of(context).pop(retornado);
     } else {}
@@ -103,107 +107,184 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
             ));
   }
 
+  Widget DialogBottom() {
+    return CupertinoPicker(
+      magnification: 1.22,
+      squeeze: 1.2,
+      useMagnifier: true,
+      itemExtent: 32,
+      looping: true,
+
+      // This is called when selected item is changed.
+      onSelectedItemChanged: (int selectedItem) {
+        ref.watch(groupProvider.state).state = selectedItem;
+      },
+      children: List<Widget>.generate(_groupNames.length, (int index) {
+        return Center(
+          child: Text(
+            _groupNames[index],
+            style: GoogleFonts.karla(),
+          ),
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Color selectedColor = ref.watch(colorProvider);
+
     return AlertDialog(
+      backgroundColor: Colors.black,
       contentPadding: EdgeInsets.zero,
       insetPadding: EdgeInsets.zero,
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width / 1.5,
-        height: MediaQuery.of(context).size.height / 1.5,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: Colors.black12,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      controller: nameController,
-                      textAlign: TextAlign.center,
-                      style:
-                          GoogleFonts.karla(color: Colors.white, fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: "Name",
-                      ),
-                    ),
-                    TextField(
-                      controller: weightController,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(3),
-                      ],
-                      style:
-                          GoogleFonts.karla(color: Colors.white, fontSize: 15),
-                      decoration: InputDecoration(
-                        hintText: "Weight",
-                        border: InputBorder.none,
-                      ),
-                    ),
+      content: Column(
+        //mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          //*Colorines
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(color: selectedColor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Campos(),
+                  //! CUPERTINO PICKER
+                  Botoneria(),
+                  daySelect(),
+                ],
+              ),
+            ),
+          ),
+          //!Campos a Rellenar
+          //!! Dias de la Semana
+          Colores(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+              textColor: Colors.white,
+              child: Text("Guardar"),
+              color: Color.fromARGB(255, 54, 54, 54),
+              onPressed: () {
+                _onsave();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-                    //CUPERTINO PICKER
+//!Botones
+  Widget Botoneria() {
+    return CupertinoButton(
+      child: Center(
+        child: Text(
+          _groupNames[ref.watch(groupProvider)],
+          style: GoogleFonts.karla(color: Colors.white70),
+        ),
+      ),
+      onPressed: () => _showDialog(DialogBottom()),
+    );
+  }
 
-                    CupertinoButton(
-                      child: Center(
-                        child: Text(
-                          _groupNames[ref.watch(groupProvider)],
-                          style: GoogleFonts.karla(color: Colors.white70),
-                        ),
-                      ),
-                      onPressed: () => _showDialog(
-                        CupertinoPicker(
-                          magnification: 1.22,
-                          squeeze: 1.2,
-                          useMagnifier: true,
-                          itemExtent: 32,
-                          looping: true,
-
-                          // This is called when selected item is changed.
-                          onSelectedItemChanged: (int selectedItem) {
-                            ref.watch(groupProvider.state).state = selectedItem;
-                          },
-                          children: List<Widget>.generate(_groupNames.length,
-                              (int index) {
-                            return Center(
-                              child: Text(
-                                _groupNames[index],
-                                style: GoogleFonts.karla(),
-                              ),
-                            );
-                          }),
-                        ),
-                      ),
-                    ),
-                    //Dias de la Semana
-                    SelectWeekDays(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      days: _days,
-                      onSelect: (values) {
-                        print(values);
-                      },
-                    ),
-                  ],
+//!Campos
+  Widget Campos() {
+    return Column(
+      children: [
+        //*Nombre
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white30),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: TextField(
+                textAlign: TextAlign.center,
+                controller: nameController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Name",
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MaterialButton(
-                textColor: Colors.white,
-                child: Text("Guardar"),
-                color: Color.fromARGB(255, 54, 54, 54),
-                onPressed: () {
-                  _onsave();
-                },
+          ),
+        ),
+        //*Peso
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.orange),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: TextField(
+                controller: weightController,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(4),
+                ],
+                style: GoogleFonts.karla(color: Colors.white30, fontSize: 15),
+                decoration: InputDecoration(
+                  hintText: "Weight",
+                  border: InputBorder.none,
+                ),
               ),
-            )
-          ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  //!Dias de la semana
+
+  Widget daySelect() {
+    return SelectWeekDays(
+        backgroundColor: Colors.black26,
+        daysFillColor: Colors.orangeAccent,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        days: _days,
+        onSelect: (values) {
+          print(values);
+        });
+  }
+
+  Widget Colores() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 4,
+      child: Expanded(
+        child: GridView.builder(
+          scrollDirection: Axis.horizontal,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
+          itemCount: Colors.accents.length,
+          itemBuilder: ((context, index) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+              child: InkWell(
+                onTap: () {
+                  ref.read(colorProvider.state).state = Colors.primaries[index];
+                },
+                child: CircleAvatar(
+                  radius: 1,
+                  backgroundColor: Colors.accents[index],
+                ),
+              ),
+            );
+          }),
         ),
       ),
     );
