@@ -147,18 +147,14 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
           //*Colorines
           Expanded(
             flex: 1,
-            child: Container(
-              decoration: BoxDecoration(color: selectedColor),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Campos(),
-                  //! CUPERTINO PICKER
-                  Chips(),
-                  Botoneria(),
-                  daySelect(),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Campos(),
+                Divisor(),
+                Botoneria(),
+                daySelect(),
+              ],
             ),
           ),
 
@@ -180,34 +176,62 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
     );
   }
 
-//!Botones
-  Widget Botoneria() {
-    return CupertinoButton(
-      child: Center(
-        child: Text(
-          ref.read(repsProvider).toString(),
-          style: GoogleFonts.karla(color: Colors.white70),
-        ),
+//*Nuevos Widgets
+  Widget Divisor() {
+    return SizedBox(
+      child: Container(
+        height: 2,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Color.fromARGB(255, 29, 25, 249),
+          Color.fromARGB(255, 104, 29, 146),
+        ], stops: [
+          -1.0,
+          1.0
+        ])),
       ),
-      onPressed: () => _showDialog(RepsPicker()),
     );
   }
 
-  Widget Chips() {
-    return SizedBox(
-      width: 300,
-      height: 50,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.all(8),
-        itemCount: _groupNames.length,
-        itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-              onTap: () => {}, child: Chip(label: Text(_groupNames[index])));
-        },
-        separatorBuilder: (BuildContext context, int index) =>
-            const VerticalDivider(),
-      ),
+//!Botones
+  Widget Botoneria() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+            side:
+                BorderSide(width: 1, color: Color.fromARGB(255, 142, 142, 142)),
+          ),
+          onPressed: () {},
+          child: Text('3X'),
+        ),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+            side:
+                BorderSide(width: 1, color: Color.fromARGB(255, 142, 142, 142)),
+          ),
+          onPressed: () {},
+          child: Text('4X'),
+        ),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+            side:
+                BorderSide(width: 1, color: Color.fromARGB(255, 142, 142, 142)),
+          ),
+          onPressed: () {},
+          child: Text('2X'),
+        ),
+      ],
     );
   }
 
@@ -215,55 +239,73 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
   Widget Campos() {
     return Column(
       children: [
-        //*Nombre
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-          child: Container(
-            width: MediaQuery.of(context).size.width / 1.5,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            //*Nombre
+            Text(
+              "Name",
+              textAlign: TextAlign.left,
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: TextField(
-                textAlign: TextAlign.center,
-                controller: nameController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Name",
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Name",
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
+
         //*Peso
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
-          child: Container(
-            width: MediaQuery.of(context).size.width / 1.5,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: TextField(
-                controller: weightController,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                style: GoogleFonts.karla(color: Colors.white, fontSize: 15),
-                decoration: InputDecoration(
-                  hintText: "Weight",
-                  border: InputBorder.none,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Weight"),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: TextField(
+                    controller: weightController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(4),
+                    ],
+                    style: GoogleFonts.karla(color: Colors.white, fontSize: 15),
+                    decoration: InputDecoration(
+                      hintText: "Weight",
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          ],
+        )
         //*Reps
 
         //*Mancuerna, Polea o Barra
