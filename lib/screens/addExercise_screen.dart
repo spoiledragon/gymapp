@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gymapp/classes/ExerciseClass.dart';
 import 'package:day_picker/day_picker.dart';
-import 'package:day_picker/model/day_in_week.dart';
+
 import 'package:gymapp/states/states.dart';
 
 class AddExercise_class extends ConsumerStatefulWidget {
@@ -107,22 +107,21 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
             ));
   }
 
-  Widget DialogBottom() {
+  Widget RepsPicker() {
     return CupertinoPicker(
       magnification: 1.22,
       squeeze: 1.2,
       useMagnifier: true,
       itemExtent: 32,
       looping: true,
-
       // This is called when selected item is changed.
       onSelectedItemChanged: (int selectedItem) {
-        ref.watch(groupProvider.state).state = selectedItem;
+        ref.read(repsProvider.state).state = selectedItem;
       },
-      children: List<Widget>.generate(_groupNames.length, (int index) {
+      children: List<Widget>.generate(30, (int index) {
         return Center(
           child: Text(
-            _groupNames[index],
+            index.toString(),
             style: GoogleFonts.karla(),
           ),
         );
@@ -132,6 +131,8 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
 
   @override
   Widget build(BuildContext context) {
+    final reps = ref.watch(repsProvider);
+    int sets = ref.watch(setsProvider);
     final Color selectedColor = ref.watch(colorProvider);
 
     return AlertDialog(
@@ -142,8 +143,10 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          Colores(),
           //*Colorines
           Expanded(
+            flex: 1,
             child: Container(
               decoration: BoxDecoration(color: selectedColor),
               child: Column(
@@ -151,15 +154,16 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                 children: [
                   Campos(),
                   //! CUPERTINO PICKER
+                  Chips(),
                   Botoneria(),
                   daySelect(),
                 ],
               ),
             ),
           ),
+
           //!Campos a Rellenar
           //!! Dias de la Semana
-          Colores(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: MaterialButton(
@@ -181,11 +185,29 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
     return CupertinoButton(
       child: Center(
         child: Text(
-          _groupNames[ref.watch(groupProvider)],
+          ref.read(repsProvider).toString(),
           style: GoogleFonts.karla(color: Colors.white70),
         ),
       ),
-      onPressed: () => _showDialog(DialogBottom()),
+      onPressed: () => _showDialog(RepsPicker()),
+    );
+  }
+
+  Widget Chips() {
+    return SizedBox(
+      width: 300,
+      height: 50,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.all(8),
+        itemCount: _groupNames.length,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+              onTap: () => {}, child: Chip(label: Text(_groupNames[index])));
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            const VerticalDivider(),
+      ),
     );
   }
 
@@ -199,7 +221,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
           child: Container(
             width: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white30),
+              border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
@@ -221,7 +243,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
           child: Container(
             width: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.orange),
+              border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
@@ -233,7 +255,7 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(4),
                 ],
-                style: GoogleFonts.karla(color: Colors.white30, fontSize: 15),
+                style: GoogleFonts.karla(color: Colors.white, fontSize: 15),
                 decoration: InputDecoration(
                   hintText: "Weight",
                   border: InputBorder.none,
@@ -242,6 +264,9 @@ class _AddExercise_classState extends ConsumerState<AddExercise_class> {
             ),
           ),
         ),
+        //*Reps
+
+        //*Mancuerna, Polea o Barra
       ],
     );
   }

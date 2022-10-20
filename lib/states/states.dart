@@ -25,3 +25,5 @@ final homeindexProvider = StateProvider((ref) => 0);
 final darkThemeProvider = StateProvider<bool>((ref) => true);
 //AddExcercise
 final colorProvider = StateProvider<Color>((ref) => Colors.amber);
+final repsProvider = StateProvider<int>((ref) => 15);
+final setsProvider = StateProvider<int>((ref) => 4);
